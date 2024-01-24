@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hierarchical Tree Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    ul, li {
+      list-style-type: none;
+      padding: 0;
+      margin: 10;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div>
+    <h1>Hierarchical Tree Demo</h1>
+    <button onclick="addSingleNode()">Add Single Node</button>
+    <button onclick="addChildNode()">Add Child Node</button>
+    <button onclick="addParentNode()">Add Parent Node</button>
+    <button onclick="deleteNode()">Delete Node</button>
+  </div>
+
+  <div id="tree-container">
+    <ul id="tree">
+    </ul>
+  </div>
+
+  <script>
+    const treeData = {
+      text: 'Root',
+      children: [
+        {
+          text: 'Node 1',
+          children: [
+            { text: 'Node 01' },
+            { text: 'Node 02' }
+          ]
+        },
+        {
+          text: 'Node 2'
+        }
+      ]
+    };
+
+    renderTree(treeData, document.getElementById('tree'));
+
+    function renderTree(node, parentElement) {
+      const listItem = document.createElement('li');
+      listItem.textContent = node.text;
+
+      if (node.children) {
+        const childList = document.createElement('ul');
+        node.children.forEach(child => renderTree(child, childList));
+        listItem.appendChild(childList);
+      }
+
+      parentElement.appendChild(listItem);
+    }
+
+    function addSingleNode() {
+      const newNode = { text: 'New Single Node' };
+      renderTree(newNode, document.querySelector('li.selected') || document.getElementById('tree'));
+    }
+
+	function addChildNode() {
+      const newNode = { text: 'New Child Node' };
+      renderTree(newNode, document.querySelector('li.selected') || document.getElementById('tree'));
+	  selectedNode.classList.remove('selected');
+    }
+
+	function addParentNode() {
+      const newNode = { text: 'New Parent Node' };
+      renderTree(newNode, document.querySelector('li.selected') || document.getElementById('tree'));
+	   selectedNode.classList.remove('selected');
+    }
+
+    function deleteNode() {
+      const selectedNode = document.querySelector('li.selected');
+      if (selectedNode) {
+        selectedNode.parentNode.removeChild(selectedNode);
+      }
+    }
+
+    document.getElementById('tree-container').addEventListener('click', function (event) {
+      const selectedNode = document.querySelector('li.selected');
+      if (selectedNode) {
+        selectedNode.classList.remove('selected');
+      }
+      if (event.target.nodeName === 'LL') {
+        event.target.classList.add('selected');
+      }
+    });
+  </script>
+
+</body>
+</html>
